@@ -28,7 +28,7 @@ class TicTacToe(object):
         self.computer_board = 0
         self.player_symbol = 'X'
         self.computer_symbol = 'O'
-        self.fullboard = reduce(lambda x,y: x|y, [1 << i for i in range(0,9)], 0)
+        self.full_board = reduce(lambda x,y: x|y, [1 << i for i in range(0,9)], 0)
         self.winner = None
         self.winning_combinations = [reduce(lambda x,y: x|y, [1 << i for i in range(3)], 0),        # Rows
                                      reduce(lambda x,y: x|y, [1 << i for i in range(3, 6)], 0),
@@ -88,19 +88,29 @@ class TicTacToe(object):
         """
         Checks If board is full or if anybody can make a move
         """
-        return False
+        return self.full_board == self.game_board
 
     def Won(self):
         """
         Checks if Player/Computer won the game
         """
-        return True
+        if not self.winner:
+            for combo in self.winning_combinations:
+                if self.player_board & combo == combo:
+                    self.winner = "Player"
+                elif self.computer_board & combo == combo:
+                    self.winner = "Computer"
+                if self.winner:
+                    break
+        return self.winner != None
 
     def Winner(self):
         """
         Returns the name of winner
         """
-        return None
+        if not self.winner:
+            self.Won()
+        return self.winner
 
 if __name__ == "__main__":
     while True:
