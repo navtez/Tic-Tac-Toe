@@ -100,7 +100,7 @@ class TicTacToe(object):
         position = self.PredictMove()
         if not self.MakeMove(position, 'Computer'):
             raise Exception("Invalid Move!")
-        print "Computer played at {0}".format(position + 1)
+        print "Computer played at {0}".format(position)
 
     def PredictMove(self):
         """
@@ -121,6 +121,18 @@ class TicTacToe(object):
                 for combo in self.winning_combinations:
                     if new_player_board & combo == combo:
                         return position
+        # Cover X-O-X scenarios
+        extreme_corners = [(0, 8), (2, 6)]
+        mid_positions = [1, 3, 5, 7]
+        for corners in extreme_corners:
+            if self.player_board & (1 << corners[0]) and self.player_board & (1 << corners[1]):
+                for mid in mid_positions:
+                    if not self.game_board & (1 << mid):
+                        return mid
+        # Prefer center position and then corner positions
+        for position in [4, 0, 2, 6, 8]:
+            if not self.game_board & (1 << position):
+                return position
         # Return any random available position
         available_positions = []
         for position in positions:
@@ -129,8 +141,6 @@ class TicTacToe(object):
         if available_positions:
             return available_positions[random.randrange(len(available_positions))]
         raise Exception("Unable to find any available position")
-
-
 
     def IsBoardFull(self):
         """
@@ -177,7 +187,7 @@ if __name__ == "__main__":
         print "\n\n"
         print '*' * 50
         if game.Won():
-            print "Congratulations! {0} who won the game!".format(game.Winner())
+            print "Congratulations! {0} won the game!".format(game.Winner())
         else:
             print "Game is Drawn!"
         print '*' * 50
