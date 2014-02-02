@@ -43,7 +43,22 @@ class TicTacToe(object):
         """
         Draws TicTacToe board
         """
-        pass
+        rows, cols = self.rows, self.cols
+        psymbol = self.player_symbol
+        csymbol = self.computer_symbol
+        pboard = self.player_board
+        cboard = self.computer_board
+        print "\n\n"
+        print '-' * ((10 + 1) * self.cols + 1)
+        for row in range(rows):
+            line = ""
+            for col in range(cols):
+                pos = row * cols + col
+                line += "|{0:^10}".format(psymbol if pboard & 1<<pos else
+                                         csymbol if cboard & 1<<pos else pos)
+            print line + '|'
+            print '-' * ((10 + 1) * self.cols + 1)
+        print "\n\n"
 
     def MakeMove(self, position, actor):
         """
