@@ -21,7 +21,23 @@ class TicTacToe(object):
         """
         Initializes the game
         """
-        pass
+        self.rows = 3
+        self.cols = 3
+        self.game_board = 0
+        self.player_board = 0
+        self.computer_board = 0
+        self.player_symbol = 'X'
+        self.computer_symbol = 'O'
+        self.fullboard = reduce(lambda x,y: x|y, [1 << i for i in range(0,9)], 0)
+        self.winner = None
+        self.winning_combinations = [reduce(lambda x,y: x|y, [1 << i for i in range(3)], 0),        # Rows
+                                     reduce(lambda x,y: x|y, [1 << i for i in range(3, 6)], 0),
+                                     reduce(lambda x,y: x|y, [1 << i for i in range(6, 9)], 0),
+                                     reduce(lambda x,y: x|y, [1 << i for i in range(0, 9, 3)], 0),  # Columns
+                                     reduce(lambda x,y: x|y, [1 << i for i in range(1, 9, 3)], 0),
+                                     reduce(lambda x,y: x|y, [1 << i for i in range(2, 9, 3)], 0),
+                                     reduce(lambda x,y: x|y, [1, 1<<4, 1<<8], 0),                   # Diagonals
+                                     reduce(lambda x,y: x|y, [1<<2, 1<<4, 1<<6], 0)]
 
     def DrawBoard(self):
         """
