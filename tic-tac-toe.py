@@ -55,7 +55,7 @@ class TicTacToe(object):
             for col in range(cols):
                 pos = row * cols + col
                 line += "|{0:^10}".format(psymbol if pboard & 1<<pos else
-                                         csymbol if cboard & 1<<pos else pos)
+                                         csymbol if cboard & 1<<pos else pos + 1)
             print line + '|'
             print '-' * ((10 + 1) * self.cols + 1)
         print "\n\n"
@@ -64,25 +64,39 @@ class TicTacToe(object):
         """
         Makes next move at position
         """
-        pass
+        return True
 
     def PlayerMove(self):
         """
         Asks Player for position and make a move
         """
-        pass
+        while True:
+            response = raw_input("Please enter your move [1 - 9]: ")
+            try:
+                move = int(response)
+                if move not in range(1, 9):
+                    print "Please enter number between 1 and 9"
+                elif self.MakeMove(move - 1, 'Player'):
+                    return
+            except ValueError:
+                print "Invalid Move!"
+
 
     def ComputerMove(self):
         """
         Asks Computer to make a move
         """
-        pass
+        position = self.PredictMove()
+        if not self.MakeMove(position, 'Computer'):
+            raise Exception("Invalid Move!")
+        print "Computer played at {0}".format(position + 1)
 
     def PredictMove(self):
         """
         Predicts move for computer
         """
-        pass
+        # TODO: Implement the prediction of next move by computer
+        return 1
 
     def IsBoardFull(self):
         """
