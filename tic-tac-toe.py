@@ -60,6 +60,19 @@ class TicTacToe(object):
             print '-' * ((10 + 1) * self.cols + 1)
         print "\n\n"
 
+    def ChooseSymbol(self):
+        """
+        Allow player to choose symbol of his/her choice
+        """
+        print "\n\n"
+        symbol = str.upper(raw_input("Please enter the symbol you would like to prefer? "
+                                     "[X, O, Any Key = Default]: "))
+        if symbol in ['X', 'O']:
+            self.player_symbol = symbol
+            self.computer_symbol = 'X' if symbol == 'O' else 'O'
+        print "Player Symbol: {0}".format(self.player_symbol)
+        print "Computer Symbol: {0}".format(self.computer_symbol)
+
     def MakeMove(self, position, actor):
         """
         Makes next move at position
@@ -85,7 +98,7 @@ class TicTacToe(object):
             response = raw_input("Please enter your move [1 - 9]: ")
             try:
                 move = int(response)
-                if move < 1 and move > 9:
+                if move < 1 or move > 9:
                     print "Please enter number between 1 and 9"
                 elif self.MakeMove(move - 1, 'Player'):
                     return
@@ -173,6 +186,7 @@ class TicTacToe(object):
 if __name__ == "__main__":
     while True:
         game = TicTacToe()
+        game.ChooseSymbol()
         game.DrawBoard();
         players_turn = random.randint(0, 1)
         # while game is not won yet or board is not full
