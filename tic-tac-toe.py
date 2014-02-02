@@ -113,27 +113,26 @@ class TicTacToe(object):
         position = self.PredictMove()
         if not self.MakeMove(position, 'Computer'):
             raise Exception("Invalid Move!")
-        print "Computer played at {0}".format(position)
+        print "Computer played at {0}".format(position + 1)
 
     def PredictMove(self):
         """
         Predicts move for computer
         """
         positions = range(9)
+        player_winning_positions = []
         # Check if computer is winning
         for position in positions:
             if not self.game_board & (1 << position):
                 new_computer_board = self.computer_board | (1 << position)
+                new_player_board = self.player_board | (1 << position)
                 for combo in self.winning_combinations:
                     if new_computer_board & combo == combo:
                         return position
-        # Check if player is winning
-        for position in positions:
-            if not self.game_board & (1 << position):
-                new_player_board = self.player_board | (1 << position)
-                for combo in self.winning_combinations:
                     if new_player_board & combo == combo:
-                        return position
+                        player_winning_positions.append(position)
+        if player_winning_positions:
+            return player_winning_positions[0]
         # Cover X-O-X scenarios
         extreme_corners = [(0, 8), (2, 6)]
         mid_positions = [1, 3, 5, 7]
