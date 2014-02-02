@@ -85,7 +85,7 @@ class TicTacToe(object):
             response = raw_input("Please enter your move [1 - 9]: ")
             try:
                 move = int(response)
-                if move not in range(1, 9):
+                if move < 1 and move > 9:
                     print "Please enter number between 1 and 9"
                 elif self.MakeMove(move - 1, 'Player'):
                     return
@@ -106,8 +106,31 @@ class TicTacToe(object):
         """
         Predicts move for computer
         """
-        # TODO: Implement the prediction of next move by computer
-        return 1
+        positions = range(9)
+        # Check if computer is winning
+        for position in positions:
+            if not self.game_board & (1 << position):
+                new_computer_board = self.computer_board | (1 << position)
+                for combo in self.winning_combinations:
+                    if new_computer_board & combo == combo:
+                        return position
+        # Check if player is winning
+        for position in positions:
+            if not self.game_board & (1 << position):
+                new_player_board = self.player_board | (1 << position)
+                for combo in self.winning_combinations:
+                    if new_player_board & combo == combo:
+                        return position
+        # Return any random available position
+        available_positions = []
+        for position in positions:
+            if not self.game_board & (1 << position):
+                available_positions.append(position)
+        if available_positions:
+            return available_positions[random.randrange(len(available_positions))]
+        raise Exception("Unable to find any available position")
+
+
 
     def IsBoardFull(self):
         """
@@ -154,9 +177,9 @@ if __name__ == "__main__":
         print "\n\n"
         print '*' * 50
         if game.Won():
-            print "Game is Drawn!"
+            print "Congratulations! {0} who won the game!".format(game.Winner())
         else:
-            print "Congratulations {0} who won the game!".format(game.Winner())
+            print "Game is Drawn!"
         print '*' * 50
         print "\n\n"
         # Ask if the player want to play one more time
