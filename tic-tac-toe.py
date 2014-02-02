@@ -64,6 +64,17 @@ class TicTacToe(object):
         """
         Makes next move at position
         """
+        current_board = self.player_board if actor == 'Player' else self.computer_board
+        if not self.game_board & (1 << position):
+            current_board = current_board | (1 << position)
+            if actor == "Player":
+                self.player_board = current_board
+            else:
+                self.computer_board = current_board
+        else:
+            print "This position {0} is not available".format(position + 1)
+            return False
+        self.game_board = self.computer_board ^ self.player_board
         return True
 
     def PlayerMove(self):
